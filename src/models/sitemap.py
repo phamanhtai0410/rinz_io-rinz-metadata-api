@@ -1,0 +1,79 @@
+# -*- coding: utf-8 -*-
+"""
+   Description:
+        -
+        -
+"""
+from lib.model import BaseMG
+from pymodm import fields
+
+from src.enums.page import PageCode, ComponentCode, BlockCode
+from src.enums.route import PageRoute
+
+mockup = [
+    {
+        "page": PageCode.HOME_PAGE,
+        "code": BlockCode.TOP_NFT,
+        "order": 1,
+        "title": "",
+        "description": "",
+        "type": ComponentCode.VIDEO_BANNER,
+        "route": PageRoute.TOP_NFT
+    },
+    {
+        "page": PageCode.HOME_PAGE,
+        "code": BlockCode.TOP_MUSIC,
+        "order": 2,
+        "title": "Top Music",
+        "description": "",
+        "type": ComponentCode.VIDEO_SHORT,
+        "route": PageRoute.TOP_MUSIC
+    },
+    {
+        "page": PageCode.HOME_PAGE,
+        "code": BlockCode.TOP_LIVE,
+        "order": 3,
+        "title": "Top Live",
+        "description": "",
+        "type": ComponentCode.VIDEO_BANNER,
+        "route": PageRoute.TOP_LIVE
+    },
+    {
+        "page": PageCode.HOME_PAGE,
+        "code": BlockCode.TOP_VIDEO,
+        "order": 4,
+        "title": "Top Videos",
+        "description": "",
+        "type": ComponentCode.VIDEO_SLIDER,
+        "route": PageRoute.TOP_VIDEO
+    },
+    {
+        "page": PageCode.HOME_PAGE,
+        "code": BlockCode.TOP_SHORT,
+        "order": 5,
+        "title": "Top Shorts",
+        "description": "",
+        "type": ComponentCode.VIDEO_SHORT,
+        "route": PageRoute.TOP_SHORT
+    },
+]
+
+
+class SitemapModel(BaseMG):
+    class Meta:
+        collection_name = 'sitemaps'
+        final = True
+        ignore_unknown_fields = True
+
+    # _id = fields.ObjectIdField(primary_key=True)
+    page = fields.CharField(default='')
+    code = fields.CharField(default='')
+    title = fields.CharField(default='')
+    description = fields.CharField(default='')
+    type = fields.CharField(default='')
+    route = fields.CharField()
+    order = fields.IntegerField()
+
+    @staticmethod
+    def get_mock():
+        return mockup
