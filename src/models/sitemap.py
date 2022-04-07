@@ -15,8 +15,10 @@ mockup = [
         "page": PageCode.HOME_PAGE,
         "code": BlockCode.TOP_NFT,
         "order": 1,
-        "title": "",
-        "description": "",
+        "props": {
+            "title": "",
+            "description": ""
+        },
         "type": ComponentCode.VIDEO_BANNER,
         "route": PageRoute.TOP_NFT
     },
@@ -24,8 +26,10 @@ mockup = [
         "page": PageCode.HOME_PAGE,
         "code": BlockCode.TOP_MUSIC,
         "order": 2,
-        "title": "Top Music",
-        "description": "",
+        "props": {
+            "title": "Top Music",
+            "description": ""
+        },
         "type": ComponentCode.VIDEO_SHORT,
         "route": PageRoute.TOP_MUSIC
     },
@@ -33,8 +37,8 @@ mockup = [
         "page": PageCode.HOME_PAGE,
         "code": BlockCode.TOP_LIVE,
         "order": 3,
-        "title": "Top Live",
-        "description": "",
+        "props": {"title": "Top Live",
+                  "description": ""},
         "type": ComponentCode.VIDEO_BANNER,
         "route": PageRoute.TOP_LIVE
     },
@@ -42,8 +46,8 @@ mockup = [
         "page": PageCode.HOME_PAGE,
         "code": BlockCode.TOP_VIDEO,
         "order": 4,
-        "title": "Top Videos",
-        "description": "",
+        "props": {"title": "Top Videos",
+                  "description": ""},
         "type": ComponentCode.VIDEO_SLIDER,
         "route": PageRoute.TOP_VIDEO
     },
@@ -51,8 +55,10 @@ mockup = [
         "page": PageCode.HOME_PAGE,
         "code": BlockCode.TOP_SHORT,
         "order": 5,
-        "title": "Top Shorts",
-        "description": "",
+        "props": {
+            "title": "Top Shorts",
+            "description": ""
+        },
         "type": ComponentCode.VIDEO_SHORT,
         "route": PageRoute.TOP_SHORT
     },

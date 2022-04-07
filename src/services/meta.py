@@ -12,13 +12,16 @@ from src.models.sitemap import SitemapModel
 class MetaService(object):
 
     @classmethod
-    def get_categories(cls, page: str = PageCode.HOME_PAGE):
-        _categories = SitemapModel.get_mock()
+    def get_components(cls, page: str = PageCode.HOME_PAGE):
+        _components = SitemapModel.get_mock()
         return [
             {
                 **x,
-                "items": cls.get_top(x['code'])
-            } for x in _categories
+                "props": {
+                    **x["props"],
+                    "items": cls.get_top(x['code'])
+                }
+            } for x in _components
         ]
 
     @staticmethod
