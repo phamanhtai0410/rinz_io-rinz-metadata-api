@@ -1,4 +1,4 @@
-FROM  420811272222.dkr.ecr.ap-southeast-1.amazonaws.com/rinz-staging-ecr:pythonbase_v1
+FROM python:3.9.4-alpine
 
 RUN apk add --no-cache  tzdata git make  gcc g++ 
 
