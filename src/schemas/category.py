@@ -10,6 +10,15 @@ from lib.schema.req import ResDatetimeField, ObjectIdField
 from random import randint
 
 
+class UserView(Schema):
+    class Meta:
+        ordered = True
+        unknown = EXCLUDE
+
+    username = fields.Str(missing='Unnamed')
+    avatar = fields.Str(missing='https://i.pravatar.cc/300')
+
+
 class BlockView(Schema):
     class Meta:
         ordered = True
@@ -22,9 +31,23 @@ class BlockView(Schema):
     public_address = fields.Str(required=True)
     created_time = ResDatetimeField()
     total_view = fields.Int(missing=randint(5000, 60000))
+    user = fields.Nested(UserView(), missing={
+        "username": "Unnamed",
+        "avatar": 'https://i.pravatar.cc/300'
+    })
 
 
-class CategoryView(Schema):
+class PropsComponent(Schema):
+    class Meta:
+        ordered = True
+        unknown = EXCLUDE
+
+    title = fields.Str(missing='')
+    description = fields.Str(missing='')
+    items = fields.List(fields.Nested(BlockView), missing=[])
+
+
+class ComponentView(Schema):
     class Meta:
         ordered = True
         unknown = EXCLUDE
@@ -32,17 +55,15 @@ class CategoryView(Schema):
     _id = ObjectIdField()
     page = fields.Str(missing='/')
     code = fields.Str(missing='')
-    title = fields.Str(missing='')
-    description = fields.Str(missing='')
     type = fields.Str(missing='')
-    route = fields.Str()
     order = fields.Int()
-    items = fields.List(fields.Nested(BlockView), missing=[])
+    route = fields.Str()
+    props = fields.Nested(PropsComponent())
 
 
-class Categories(Schema):
+class ComponentsView(Schema):
     class Meta:
         ordered = True
         unknown = EXCLUDE
 
-    categories = fields.List(fields.Nested(CategoryView))
+    components = fields.List(fields.Nested(ComponentView))

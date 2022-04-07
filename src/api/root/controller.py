@@ -5,7 +5,7 @@
         -
 """
 import lib
-from src.schemas.category import Categories
+from src.schemas.category import ComponentsView
 from src.services.meta import MetaService
 
 
@@ -19,9 +19,9 @@ def health_check(*args, **kwargs):
     return {}
 
 
-@lib.handle_res(login=False, res_schema=Categories)
+@lib.handle_res(login=False, res_schema=ComponentsView)
 def get_home_page(*args, **kwargs):
-    _meta = MetaService.get_categories("home")
+    _components = MetaService.get_components("home")
     return {
-        'categories': _meta
+        'components': _components
     }
