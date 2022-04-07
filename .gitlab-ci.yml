@@ -31,6 +31,7 @@ stages:
   - |
       if [ "$CI_COMMIT_REF_NAME" == "stag" ]; then
         aws eks --region $AWS_REGION update-kubeconfig --name rinz-staging-cluster
+      fi
       if [ "$CI_COMMIT_REF_NAME" == "test" ]; then
         aws eks --region $AWS_REGION update-kubeconfig --name rinz-staging-cluster
       fi
