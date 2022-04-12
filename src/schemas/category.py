@@ -4,8 +4,9 @@
         -
         -
 """
-from marshmallow import fields, EXCLUDE, Schema
+from marshmallow import fields, EXCLUDE, Schema, pre_load
 
+from lib.redis_util import get_user_by_id
 from lib.schema.req import ResDatetimeField, ObjectIdField
 from random import randint
 
@@ -17,6 +18,7 @@ class UserView(Schema):
 
     username = fields.Str(missing='Unnamed')
     avatar = fields.Str(missing='https://i.pravatar.cc/300')
+    _id = ObjectIdField()
 
 
 class BlockView(Schema):
@@ -31,10 +33,12 @@ class BlockView(Schema):
     public_address = fields.Str(required=True)
     created_time = ResDatetimeField()
     total_view = fields.Int(missing=randint(5000, 60000))
-    user = fields.Nested(UserView(), missing={
-        "username": "Unnamed",
-        "avatar": 'https://i.pravatar.cc/300'
-    })
+    user = fields.Nested(UserView(), missing={})
+
+    @pre_load
+    def load_user(self, in_data, **kwargs):
+        in_data['user'] = get_user_by_id(in_data.get('author_id', ''))
+        return in_data
 
 
 class PropsComponent(Schema):
@@ -59,6 +63,7 @@ class ComponentView(Schema):
     order = fields.Int()
     route = fields.Str()
     props = fields.Nested(PropsComponent())
+    item_route = fields.Str()
 
 
 class ComponentsView(Schema):

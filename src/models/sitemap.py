@@ -8,7 +8,7 @@ from lib.model import BaseMG
 from pymodm import fields
 
 from src.enums.page import PageCode, ComponentCode, BlockCode
-from src.enums.route import PageRoute
+from src.enums.route import PageRoute, ItemRoute
 
 mockup = [
     {
@@ -20,7 +20,8 @@ mockup = [
             "description": ""
         },
         "type": ComponentCode.VIDEO_BANNER,
-        "route": PageRoute.TOP_NFT
+        "route": PageRoute.TOP_NFT,
+        "item_route": ItemRoute.NFT
     },
     {
         "page": PageCode.HOME_PAGE,
@@ -31,7 +32,8 @@ mockup = [
             "description": ""
         },
         "type": ComponentCode.VIDEO_SHORT,
-        "route": PageRoute.TOP_MUSIC
+        "route": PageRoute.TOP_MUSIC,
+        "item_route": ItemRoute.MUSIC
     },
     {
         "page": PageCode.HOME_PAGE,
@@ -40,7 +42,8 @@ mockup = [
         "props": {"title": "Top Live",
                   "description": ""},
         "type": ComponentCode.VIDEO_BANNER,
-        "route": PageRoute.TOP_LIVE
+        "route": PageRoute.TOP_LIVE,
+        "item_route": ItemRoute.LIVE
     },
     {
         "page": PageCode.HOME_PAGE,
@@ -49,7 +52,8 @@ mockup = [
         "props": {"title": "Top Videos",
                   "description": ""},
         "type": ComponentCode.VIDEO_SLIDER,
-        "route": PageRoute.TOP_VIDEO
+        "route": PageRoute.TOP_VIDEO,
+        "item_route": ItemRoute.VIDEO
     },
     {
         "page": PageCode.HOME_PAGE,
@@ -60,7 +64,8 @@ mockup = [
             "description": ""
         },
         "type": ComponentCode.VIDEO_SHORT,
-        "route": PageRoute.TOP_SHORT
+        "route": PageRoute.TOP_SHORT,
+        "item_route": ItemRoute.SHORT
     }
 ]
 

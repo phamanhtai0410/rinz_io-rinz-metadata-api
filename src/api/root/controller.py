@@ -6,6 +6,7 @@
 """
 import lib
 from lib.http.base import NotFound
+from lib.redis_util import get_user_by_id
 from lib.util import is_oid
 from src.schemas.category import ComponentsView
 from src.services.meta import MetaService
@@ -37,4 +38,5 @@ def get_obj_by_id(route, obj_id, *args, **kwargs):
     _obj = MetaService.get_obj_by_id(obj_id)
     if _obj:
         _obj['_id'] = obj_id
+        _obj['user'] = get_user_by_id(obj_id=_obj.get('author_id', ''))
     return _obj
