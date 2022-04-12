@@ -61,7 +61,7 @@ mockup = [
         },
         "type": ComponentCode.VIDEO_SHORT,
         "route": PageRoute.TOP_SHORT
-    },
+    }
 ]
 
 

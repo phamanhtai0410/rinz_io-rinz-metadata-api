@@ -11,6 +11,10 @@ from src.models.sitemap import SitemapModel
 
 class MetaService(object):
 
+    @staticmethod
+    def get_obj_by_id(obj_id):
+        return EventModel.get_item(obj_id)
+
     @classmethod
     def get_components(cls, page: str = PageCode.HOME_PAGE):
         _components = SitemapModel.get_mock()
