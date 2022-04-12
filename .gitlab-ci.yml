@@ -1,4 +1,3 @@
-
 variables:
   REGION: asia-southeast1
   IMAGE_NAME: rinz-metadata-api
@@ -140,7 +139,6 @@ build_prod:
   artifacts:
     paths:
     - prod.yaml
-
 
 deploy_stag:
   stage: deploy
