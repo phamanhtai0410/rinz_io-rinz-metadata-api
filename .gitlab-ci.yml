@@ -164,7 +164,6 @@ deploy_test:
   only:
     refs:
       - test
-
 deploy_prod:
   stage: deploy
   image:  alpine/helm:3.2.1
