@@ -8,7 +8,9 @@ import lib
 from lib.http.base import NotFound
 from lib.redis_util import get_user_by_id
 from lib.util import is_oid
+from src.enums.obj import ObjType
 from src.schemas.category import ComponentsView
+from src.schemas.object import ObjectDetail
 from src.services.meta import MetaService
 
 
@@ -30,13 +32,18 @@ def get_home_page(*args, **kwargs):
     }
 
 
-@lib.handle_res(login=False)
+@lib.handle_res(login=False, res_schema=ObjectDetail)
 def get_obj_by_id(route, obj_id, *args, **kwargs):
     if not is_oid(obj_id):
         raise NotFound
+    _result = {
 
+    }
     _obj = MetaService.get_obj_by_id(obj_id)
-    if _obj:
-        _obj['_id'] = obj_id
-        _obj['user'] = get_user_by_id(obj_id=_obj.get('author_id', ''))
-    return _obj
+    if not _obj:
+        raise NotFound
+    _obj['_id'] = obj_id
+    _obj['user'] = get_user_by_id(obj_id=_obj.get('author_id', ''))
+    _result['object_type'] = ObjType.VIDEO
+    _result['object'] = _obj
+    return _result
