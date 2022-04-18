@@ -36,7 +36,7 @@ class VideoSchema(Schema):
         unknown = EXCLUDE
 
     _id = ObjectIdField(required=True)
-    banner = fields.Str(missing='')
+    banner = fields.Str(missing=default_banner)
     title = fields.Str(missing='')
     description = fields.Str(missing='')
     public_address = fields.Str(required=True)
@@ -53,11 +53,6 @@ class VideoSchema(Schema):
     @pre_load
     def _load_stream(self, in_data, **kwargs):
         _ref_id = in_data['_id']
-        if 'banners' in in_data and in_data['banners'] and len(in_data['banners']) > 0:
-            in_data['banner'] = get(in_data, 'banners[0].url', default=default_banner)  # in_data['banner'][0]['url']
-        else:
-            in_data[
-                'banner'] = default_banner
         if isinstance(_ref_id, str):
             _ref_id = ObjectId(_ref_id)
 
@@ -95,4 +90,22 @@ class ObjectDetail(Schema):
 
         _obj = map_object[in_data['object_type']].load(in_data['object'])
         in_data['object'] = _obj
+        return in_data
+
+
+class ExploreAll(Schema):
+    class Meta:
+        ordered = True
+        unknown = EXCLUDE
+
+    items = fields.List(fields.Dict(), missing=[])
+    object_type = fields.Str(required=True)
+
+    @pre_load
+    def _load_object(self, in_data, **kwargs):
+        if not in_data['object_type'] in map_object:
+            raise Exception
+        _schema = map_object[in_data['object_type']]
+        _items = [_schema.load(x) for x in in_data['items']]
+        in_data['items'] = _items
         return in_data

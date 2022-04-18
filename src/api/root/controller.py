@@ -10,7 +10,7 @@ from lib.redis_util import get_user_by_id
 from lib.util import is_oid
 from src.enums.obj import ObjType
 from src.schemas.category import ComponentsView
-from src.schemas.object import ObjectDetail
+from src.schemas.object import ObjectDetail, ExploreAll
 from src.services.meta import MetaService
 
 
@@ -49,7 +49,10 @@ def get_obj_by_id(route, obj_id, *args, **kwargs):
     return _result
 
 
-@lib.handle_res()
-def get_route(route, params, *args, **kwargs):
-    _items = []
-
+@lib.handle_res(login=False, res_schema=ExploreAll)
+def get_explore(explore, params, *args, **kwargs):
+    _items, _object_type = MetaService.get_explore_all(explore)
+    return {
+        'items': _items,
+        'object_type': _object_type
+    }

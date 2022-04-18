@@ -55,11 +55,6 @@ class BlockView(Schema):
     @pre_load
     def load_user(self, in_data, **kwargs):
         in_data['user'] = get_user_by_id(in_data.get('author_id', ''))
-        if 'banners' in in_data and in_data['banners'] and len(in_data['banners']) > 0:
-            in_data['banner'] = get(in_data, 'banners[0].url', default=default_banner)  # in_data['banner'][0]['url']
-        else:
-            in_data[
-                'banner'] = default_banner
         return in_data
 
 
