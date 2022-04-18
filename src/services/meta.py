@@ -4,9 +4,11 @@
         -
         -
 """
+from src.enums.obj import ObjType
 from src.enums.page import PageCode, BlockCode
 from src.models.event import EventModel
 from src.models.sitemap import SitemapModel
+from src.models.user import UserModel
 
 
 class MetaService(object):
@@ -23,7 +25,9 @@ class MetaService(object):
                 **x,
                 "props": {
                     **x["props"],
-                    "items": cls.get_top(x['code'])
+                    "items": cls.get_top(x['code']) if x['obj_type'] != ObjType.CHANNEL
+                    else cls.get_channels(x['code']),
+                    "obj_type": x.get('obj_type')
                 }
             } for x in _components
         ]
@@ -36,3 +40,7 @@ class MetaService(object):
         # return {
         #
         # }
+
+    @staticmethod
+    def get_channels(block):
+        return list(UserModel.get_random_items(size=6))

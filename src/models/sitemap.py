@@ -72,6 +72,19 @@ mockup = [
         "route": PageRoute.TOP_SHORT,
         "item_route": ItemRoute.SHORT,
         'obj_type': ObjType.VIDEO
+    },
+    {
+        "page": PageCode.HOME_PAGE,
+        "code": BlockCode.POPULAR_CHANNEL,
+        "order": 6,
+        "props": {
+            "title": "Popular Channel",
+            "description": ""
+        },
+        "type": ComponentCode.CHANNELS,
+        "route": PageRoute.CHANNELS,
+        "item_route": ItemRoute.CHANNEL,
+        'obj_type': ObjType.CHANNEL
     }
 ]
 

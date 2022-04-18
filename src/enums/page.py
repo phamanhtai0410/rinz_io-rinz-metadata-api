@@ -14,6 +14,7 @@ class ComponentCode(object):
     VIDEO_BANNER = 'VIDEO_BANNER'
     VIDEO_SLIDER = 'VIDEO_SLIDER'
     VIDEO_SHORT = 'VIDEO_SHORT'
+    CHANNELS = 'CHANNELS'
 
 
 class BlockCode(object):
@@ -22,3 +23,4 @@ class BlockCode(object):
     TOP_MUSIC = 'BLOCK_TOP_MUSIC'
     TOP_VIDEO = 'BLOCK_TOP_VIDEO'
     TOP_SHORT = 'BLOCK_TOP_SHORT'
+    POPULAR_CHANNEL = 'POPULAR_CHANNEL'

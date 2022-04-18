@@ -10,6 +10,8 @@ from lib.redis_util import get_user_by_id
 from lib.schema.req import ResDatetimeField, ObjectIdField
 from random import randint
 
+from src.enums.obj import ObjType
+
 
 class UserView(Schema):
     class Meta:
@@ -17,6 +19,16 @@ class UserView(Schema):
         unknown = EXCLUDE
 
     username = fields.Str(missing='Unnamed')
+    avatar = fields.Str(missing='https://i.pravatar.cc/300')
+    _id = ObjectIdField()
+
+
+class ChannelView(Schema):
+    class Meta:
+        ordered = True
+        unknown = EXCLUDE
+
+    channel = fields.Str(missing='Unnamed', data_key='username')
     avatar = fields.Str(missing='https://i.pravatar.cc/300')
     _id = ObjectIdField()
 
@@ -41,6 +53,12 @@ class BlockView(Schema):
         return in_data
 
 
+map_object = {
+    ObjType.VIDEO: BlockView(),
+    ObjType.CHANNEL: ChannelView()
+}
+
+
 class PropsComponent(Schema):
     class Meta:
         ordered = True
@@ -48,7 +66,16 @@ class PropsComponent(Schema):
 
     title = fields.Str(missing='')
     description = fields.Str(missing='')
-    items = fields.List(fields.Nested(BlockView), missing=[])
+    items = fields.List(fields.Dict(), missing=[])
+
+    @pre_load
+    def _load_items(self, in_data, **kwargs):
+        if not in_data['obj_type'] in map_object:
+            raise Exception
+        _schema = map_object[in_data['obj_type']]
+        _items = [_schema.load(x) for x in in_data['items']]
+        in_data['items'] = _items
+        return in_data
 
 
 class ComponentView(Schema):
