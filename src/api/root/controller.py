@@ -51,8 +51,9 @@ def get_obj_by_id(route, obj_id, *args, **kwargs):
 
 @lib.handle_res(login=False, res_schema=ExploreAll)
 def get_explore(explore, params, *args, **kwargs):
-    _items, _object_type = MetaService.get_explore_all(explore)
+    _items, _object_type, _item_route = MetaService.get_explore_all(explore)
     return {
         'items': _items,
-        'object_type': _object_type
+        'object_type': _object_type,
+        'item_route': _item_route
     }

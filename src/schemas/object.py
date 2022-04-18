@@ -100,6 +100,7 @@ class ExploreAll(Schema):
 
     items = fields.List(fields.Dict(), missing=[])
     object_type = fields.Str(required=True)
+    item_route = fields.Str()
 
     @pre_load
     def _load_object(self, in_data, **kwargs):

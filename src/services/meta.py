@@ -27,12 +27,12 @@ class MetaService(object):
     @staticmethod
     def get_explore_all(explore):
         if f'/{explore}' in [PageRoute.TOP_NFT, PageRoute.TOP_MUSIC, PageRoute.TOP_VIDEO, PageRoute.TOP_SHORT]:
-            return list(EventModel.get_random_items(size=20)), ObjType.VIDEO
+            return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
         if f'/{explore}' in [PageRoute.TOP_LIVE]:
-            return list(EventModel.get_random_items(size=20)), ObjType.LIVE
+            return list(EventModel.get_random_items(size=20)), ObjType.LIVE, ItemRoute.LIVE
         if f'/{explore}' in [PageRoute.CHANNELS]:
-            return UserModel.get_random_items(size=20), ObjType.CHANNEL
-        return list(EventModel.get_random_items(size=20)), ObjType.VIDEO
+            return UserModel.get_random_items(size=20), ObjType.CHANNEL, ItemRoute.CHANNEL
+        return list(EventModel.get_random_items(size=20)), ObjType.VIDEO,  ItemRoute.VIDEO
 
     @classmethod
     def get_components(cls, page: str = PageCode.HOME_PAGE):
