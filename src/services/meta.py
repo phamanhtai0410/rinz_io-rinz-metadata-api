@@ -4,7 +4,7 @@
         -
         -
 """
-from src.enums.obj import ObjType
+from src.enums.obj import ObjType, MoreByItem
 from src.enums.page import PageCode, BlockCode
 from src.enums.route import ItemRoute, PageRoute
 from src.models.event import EventModel
@@ -33,6 +33,14 @@ class MetaService(object):
         if f'/{explore}' in [PageRoute.CHANNELS]:
             return UserModel.get_random_items(size=20), ObjType.CHANNEL, ItemRoute.CHANNEL
         return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+
+    @staticmethod
+    def get_more_by_item(obj_id: str, more_type: str):
+        if more_type == MoreByItem.MORE_PLAY:
+            return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+        if more_type == MoreByItem.RECOMMEND:
+            return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+        return [], ObjType.VIDEO, ItemRoute.VIDEO
 
     @classmethod
     def get_page_explore(cls, page):

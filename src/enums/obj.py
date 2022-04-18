@@ -11,3 +11,8 @@ class ObjType(object):
     SHORT_VIDEO = 'SHORT_VIDEO'
     LIVE = 'LIVE'
     CHANNEL = 'CHANNEL'
+
+
+class MoreByItem(object):
+    RECOMMEND = 'recommend'
+    MORE_PLAY = 'more-play'
