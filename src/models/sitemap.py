@@ -11,7 +11,7 @@ from src.enums.obj import ObjType
 from src.enums.page import PageCode, ComponentCode, BlockCode
 from src.enums.route import PageRoute, ItemRoute
 
-mockup = [
+mockup_home = [
     {
         "page": PageCode.HOME_PAGE,
         "code": BlockCode.TOP_NFT,
@@ -88,6 +88,82 @@ mockup = [
     }
 ]
 
+mockup_explore_live = [
+    {
+        "page": PageCode.EXPLORE_LIVE,
+        "code": BlockCode.LIVE_PAGE_BANNER_VIDEOS,
+        "order": 1,
+        "props": {
+            "title": "",
+            "description": ""
+        },
+        "type": ComponentCode.VIDEO_BANNER,
+        "item_route": ItemRoute.LIVE,
+        'obj_type': ObjType.LIVE
+    },
+    {
+        "page": PageCode.EXPLORE_LIVE,
+        "code": BlockCode.LIVE_PAGE_SHORT_VIDEOS,
+        "order": 2,
+        "props": {
+            "title": "Title",
+            "description": ""
+        },
+        "type": ComponentCode.VIDEO_SHORT,
+        # "route": PageRoute.TOP_MUSIC,
+        "item_route": ItemRoute.SHORT,
+        'obj_type': ObjType.VIDEO
+    },
+    {
+        "page": PageCode.EXPLORE_LIVE,
+        "code": BlockCode.LIVE_PAGE_SLIDER_VIDEOS,
+        "order": 3,
+        "props": {"title": "Title",
+                  "description": ""},
+        "type": ComponentCode.VIDEO_SLIDER,
+        # "route": PageRoute.TOP_LIVE,
+        "item_route": ItemRoute.VIDEO,
+        'obj_type': ObjType.VIDEO
+    },
+    {
+        "page": PageCode.EXPLORE_LIVE,
+        "code": BlockCode.LIVE_PAGE_USER_SHORT_VIDEOS,
+        "order": 4,
+        "props": {"title": "Category for you",
+                  "description": ""},
+        "type": ComponentCode.VIDEO_SHORT,
+        # "route": PageRoute.TOP_VIDEO,
+        "item_route": ItemRoute.SHORT,
+        'obj_type': ObjType.VIDEO
+    },
+    {
+        "page": PageCode.EXPLORE_LIVE,
+        "code": BlockCode.LIVE_PAGE_POPULAR_CHANNELS_WITH_FOLLOW,
+        "order": 5,
+        "props": {
+            "title": "Popular channels",
+            "description": ""
+        },
+        "type": ComponentCode.CHANNELS_WITH_FOLLOW,
+        # "route": PageRoute.TOP_SHORT,
+        "item_route": ItemRoute.CHANNEL,
+        'obj_type': ObjType.CHANNEL
+    },
+    {
+        "page": PageCode.EXPLORE_LIVE,
+        "code": BlockCode.LIVE_PAGE_RECOMMEND_SLIDER_VIDEOS,
+        "order": 6,
+        "props": {
+            "title": "Recommend for you",
+            "description": ""
+        },
+        "type": ComponentCode.VIDEO_SLIDER,
+        # "route": PageRoute.CHANNELS,
+        "item_route": ItemRoute.VIDEO,
+        'obj_type': ObjType.VIDEO
+    }
+]
+
 
 class SitemapModel(BaseMG):
     class Meta:
@@ -106,4 +182,8 @@ class SitemapModel(BaseMG):
 
     @staticmethod
     def get_mock():
-        return mockup
+        return mockup_home
+
+    @staticmethod
+    def get_explore(page_explore):
+        return mockup_explore_live

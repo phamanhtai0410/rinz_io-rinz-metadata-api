@@ -32,11 +32,29 @@ class MetaService(object):
             return list(EventModel.get_random_items(size=20)), ObjType.LIVE, ItemRoute.LIVE
         if f'/{explore}' in [PageRoute.CHANNELS]:
             return UserModel.get_random_items(size=20), ObjType.CHANNEL, ItemRoute.CHANNEL
-        return list(EventModel.get_random_items(size=20)), ObjType.VIDEO,  ItemRoute.VIDEO
+        return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+
+    @classmethod
+    def get_page_explore(cls, page):
+        _components = SitemapModel.get_explore(page_explore=page)
+        return [
+            {
+                **x,
+                "props": {
+                    **x["props"],
+                    "items": cls.get_top(x['code']) if x['obj_type'] != ObjType.CHANNEL
+                    else cls.get_channels(x['code']),
+                    "obj_type": x.get('obj_type')
+                }
+            } for x in _components
+        ]
 
     @classmethod
     def get_components(cls, page: str = PageCode.HOME_PAGE):
-        _components = SitemapModel.get_mock()
+        if page == PageCode.HOME_PAGE:
+            _components = SitemapModel.get_mock()
+        else:
+            _components = SitemapModel.get_explore(page_explore=page)
         return [
             {
                 **x,

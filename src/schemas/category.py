@@ -36,7 +36,7 @@ class ChannelView(Schema):
     _id = ObjectIdField()
 
 
-class BlockView(Schema):
+class VideoView(Schema):
     class Meta:
         ordered = True
         unknown = EXCLUDE
@@ -59,7 +59,11 @@ class BlockView(Schema):
 
 
 map_object = {
-    ObjType.VIDEO: BlockView(),
+    ObjType.VIDEO: VideoView(),
+    ObjType.LIVE: VideoView(),
+    # ObjType.SHORT: VideoView(),
+    # ObjType.LIVE: VideoView(),
+
     ObjType.CHANNEL: ChannelView()
 }
 

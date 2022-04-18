@@ -25,8 +25,8 @@ def health_check(*args, **kwargs):
 
 
 @lib.handle_res(login=False, res_schema=ComponentsView)
-def get_home_page(*args, **kwargs):
-    _components = MetaService.get_components("home")
+def get_page(explore='home',*args, **kwargs):
+    _components = MetaService.get_components(explore)
     return {
         'components': _components
     }
@@ -48,12 +48,12 @@ def get_obj_by_id(route, obj_id, *args, **kwargs):
     _result['object'] = _obj
     return _result
 
-
-@lib.handle_res(login=False, res_schema=ExploreAll)
-def get_explore(explore, params, *args, **kwargs):
-    _items, _object_type, _item_route = MetaService.get_explore_all(explore)
-    return {
-        'items': _items,
-        'object_type': _object_type,
-        'item_route': _item_route
-    }
+#
+# @lib.handle_res(login=False, res_schema=ExploreAll)
+# def get_explore(explore, params, *args, **kwargs):
+#     _items, _object_type, _item_route = MetaService.get_explore_all(explore)
+#     return {
+#         'items': _items,
+#         'object_type': _object_type,
+#         'item_route': _item_route
+#     }
