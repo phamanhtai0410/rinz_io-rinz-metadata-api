@@ -8,13 +8,14 @@ from random import randint
 
 from bson import ObjectId
 from marshmallow import Schema, EXCLUDE, fields, pre_load
+from pydash import get
 
 from lib.redis_util import get_user_by_id
 from lib.schema.req import ObjectIdField, ResDatetimeField
 from src.enums.obj import ObjType
 from src.enums.video import VideoType
 from src.models.stream import StreamModel
-from src.schemas.category import UserView
+from src.schemas.category import UserView, ChannelView, default_banner
 
 
 class StreamVideo(Schema):
@@ -52,7 +53,11 @@ class VideoSchema(Schema):
     @pre_load
     def _load_stream(self, in_data, **kwargs):
         _ref_id = in_data['_id']
-
+        if 'banners' in in_data and in_data['banners'] and len(in_data['banners']) > 0:
+            in_data['banner'] = get(in_data, 'banners[0].url', default=default_banner)  # in_data['banner'][0]['url']
+        else:
+            in_data[
+                'banner'] = default_banner
         if isinstance(_ref_id, str):
             _ref_id = ObjectId(_ref_id)
 
@@ -69,7 +74,9 @@ class VideoSchema(Schema):
 
 
 map_object = {
-    ObjType.VIDEO: VideoSchema()
+    ObjType.VIDEO: VideoSchema(),
+    ObjType.LIVE: VideoSchema(),
+    ObjType.CHANNEL: ChannelView()
 }
 
 

@@ -6,6 +6,7 @@
 """
 from src.enums.obj import ObjType
 from src.enums.page import PageCode, BlockCode
+from src.enums.route import ItemRoute
 from src.models.event import EventModel
 from src.models.sitemap import SitemapModel
 from src.models.user import UserModel
@@ -14,8 +15,15 @@ from src.models.user import UserModel
 class MetaService(object):
 
     @staticmethod
-    def get_obj_by_id(obj_id):
-        return EventModel.get_item(obj_id)
+    def get_obj_by_id(obj_id, route):
+        print('route', route)
+        if f'/{route}' in [ItemRoute.VIDEO, ItemRoute.NFT, ItemRoute.SHORT, ItemRoute.MUSIC]:
+            return EventModel.get_item(obj_id), ObjType.VIDEO
+        if f'/{route}' in [ItemRoute.LIVE]:
+            return EventModel.get_item(obj_id), ObjType.LIVE
+        if f'/{route}' in [ItemRoute.CHANNEL]:
+            return UserModel.get_item(obj_id), ObjType.CHANNEL
+        return None, None
 
     @classmethod
     def get_components(cls, page: str = PageCode.HOME_PAGE):

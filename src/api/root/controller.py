@@ -39,11 +39,17 @@ def get_obj_by_id(route, obj_id, *args, **kwargs):
     _result = {
 
     }
-    _obj = MetaService.get_obj_by_id(obj_id)
+    _obj, _object_type = MetaService.get_obj_by_id(obj_id, route)
     if not _obj:
         raise NotFound
     _obj['_id'] = obj_id
     _obj['user'] = get_user_by_id(obj_id=_obj.get('author_id', ''))
-    _result['object_type'] = ObjType.VIDEO
+    _result['object_type'] = _object_type
     _result['object'] = _obj
     return _result
+
+
+@lib.handle_res()
+def get_route(route, params, *args, **kwargs):
+    _items = []
+
