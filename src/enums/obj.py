@@ -15,4 +15,4 @@ class ObjType(object):
 
 class MoreByItem(object):
     RECOMMEND = 'recommend'
-    MORE_PLAY = 'more-play'
+    PLAY_MORE = 'play-more'

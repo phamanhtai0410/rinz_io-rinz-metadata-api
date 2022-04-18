@@ -35,11 +35,11 @@ class MetaService(object):
         return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
 
     @staticmethod
-    def get_more_by_item(obj_id: str, more_type: str):
-        if more_type == MoreByItem.MORE_PLAY:
-            return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+    def get_more_by_item(obj_id: str, more_type: str, params):
+        if more_type == MoreByItem.PLAY_MORE:
+            return list(EventModel.get_random_items(size=params.page_size)), ObjType.VIDEO, ItemRoute.VIDEO
         if more_type == MoreByItem.RECOMMEND:
-            return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+            return list(EventModel.get_random_items(size=params.page_size)), ObjType.VIDEO, ItemRoute.VIDEO
         return [], ObjType.VIDEO, ItemRoute.VIDEO
 
     @classmethod

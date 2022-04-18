@@ -35,8 +35,8 @@ class VideoSchema(Schema):
         ordered = True
         unknown = EXCLUDE
 
-    _id = ObjectIdField(required=True)
-    banner = fields.Str(missing=default_banner)
+    _id = ObjectIdField()
+    banner = fields.Str(missing=default_banner, allow_none=True)
     title = fields.Str(missing='')
     description = fields.Str(missing='')
     public_address = fields.Str(required=True)
@@ -91,6 +91,15 @@ class ObjectDetail(Schema):
         _obj = map_object[in_data['object_type']].load(in_data['object'])
         in_data['object'] = _obj
         return in_data
+
+
+class FormLoadMore(Schema):
+    class Meta:
+        ordered = True
+        unknown = EXCLUDE
+
+    page = fields.Int(missing=1, allow_none=True)
+    page_size = fields.Int(missing=20, allow_none=True)
 
 
 class ExploreAll(Schema):
