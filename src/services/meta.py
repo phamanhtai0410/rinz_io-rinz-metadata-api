@@ -85,6 +85,8 @@ class MetaService(object):
             return "NFT"
         if "MUSIC" in block:
             return "MUSIC"
+        if "LIVE" in block:
+            return "LIVE"
         return "VIDEO"
 
     @classmethod
