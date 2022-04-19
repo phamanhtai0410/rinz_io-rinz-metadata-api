@@ -59,7 +59,7 @@ class MetaService(object):
 
     @classmethod
     def get_components(cls, page: str = PageCode.HOME_PAGE):
-        if page == PageCode.HOME_PAGE:
+        if not page or page == 'home':
             _components = SitemapModel.get_mock()
         else:
             _components = SitemapModel.get_explore(page_explore=page)
@@ -76,9 +76,23 @@ class MetaService(object):
         ]
 
     @staticmethod
-    def get_top(block):
+    def get_event_type(block):
+        if "SHORT" in block:
+            return "SHORT"
+        if "VIDEO" in block:
+            return "VIDEO"
+        if "NFT" in block:
+            return "NFT"
+        if "MUSIC" in block:
+            return "MUSIC"
+        return "VIDEO"
+
+    @classmethod
+    def get_top(cls, block):
         # if block in [BlockCode.TOP_NFT, BlockCode.TOP_VIDEO]:
-        return list(EventModel.get_random_items(size=6))
+        return list(EventModel.get_random_items(filter={
+            'type': cls.get_event_type(block)
+        }, size=6))
 
         # return {
         #
