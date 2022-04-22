@@ -34,7 +34,7 @@ stages:
       if [ "$CI_COMMIT_REF_NAME" == "test" ]; then
         aws eks --region $AWS_REGION update-kubeconfig --name rinz-staging-cluster
       fi
-  - cat /root/.kube/config
+ 
 .predeploy: &predeploy |
   apk add --no-cache  bash git  python3 py3-pip
   pip3 install --upgrade pip 
