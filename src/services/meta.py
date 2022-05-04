@@ -29,20 +29,20 @@ class MetaService(object):
         if f'/{explore}' in [PageRoute.TOP_NFT, PageRoute.TOP_MUSIC, PageRoute.TOP_VIDEO]:
             return list(EventModel.get_random_items(filter={
                 'type': ObjType.VIDEO
-            },size=size)), ObjType.VIDEO, ItemRoute.VIDEO
+            }, size=size)), ObjType.VIDEO, ItemRoute.VIDEO
 
         if f'/{explore}' in [PageRoute.TOP_LIVE]:
             return list(EventModel.get_random_items(filter={
                 'type': ObjType.LIVE
-            },size=size)), ObjType.LIVE, ItemRoute.LIVE
+            }, size=size)), ObjType.LIVE, ItemRoute.LIVE
 
         if f'/{explore}' in [PageRoute.CHANNELS]:
-            return UserModel.get_random_items(filter={},size=size), ObjType.CHANNEL, ItemRoute.CHANNEL
+            return UserModel.get_random_items(filter={}, size=size), ObjType.CHANNEL, ItemRoute.CHANNEL
 
         if f'/{explore}' in [PageRoute.TOP_SHORT, PageRoute.SHORTS]:
             return list(EventModel.get_random_items(filter={
                 'type': ObjType.SHORT_VIDEO
-            },size=size)), ObjType.SHORT_VIDEO, ItemRoute.SHORT
+            }, size=size)), ObjType.SHORT_VIDEO, ItemRoute.SHORT
 
         return list(EventModel.get_random_items(size=size)), ObjType.VIDEO, ItemRoute.VIDEO
 
@@ -90,17 +90,17 @@ class MetaService(object):
 
     @staticmethod
     def get_event_type(block):
-        if "SHORT" in block:
-            return "SHORT"
-        if "VIDEO" in block:
-            return "VIDEO"
-        if "NFT" in block:
-            return "NFT"
-        if "MUSIC" in block:
-            return "MUSIC"
-        if "LIVE" in block:
-            return "LIVE"
-        return "VIDEO"
+        if ObjType.SHORT_VIDEO in block:
+            return ObjType.SHORT_VIDEO
+        if ObjType.VIDEO in block:
+            return ObjType.VIDEO
+        if ObjType.NFT in block:
+            return ObjType.NFT
+        if ObjType.MUSIC in block:
+            return ObjType.MUSIC
+        if ObjType.LIVE in block:
+            return ObjType.LIVE
+        return ObjType.VIDEO
 
     @classmethod
     def get_top(cls, block):
@@ -116,4 +116,3 @@ class MetaService(object):
     @staticmethod
     def get_channels(block):
         return list(UserModel.get_random_items(size=6))
-

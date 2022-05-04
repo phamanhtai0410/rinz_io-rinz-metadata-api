@@ -11,6 +11,8 @@ class ObjType(object):
     SHORT_VIDEO = 'SHORT'
     LIVE = 'LIVE'
     CHANNEL = 'CHANNEL'
+    NFT = 'NFT'
+    MUSIC = 'MUSIC'
 
 
 class MoreByItem(object):

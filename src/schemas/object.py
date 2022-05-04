@@ -4,7 +4,7 @@
         -
         -
 """
-from random import randint
+from random import randint, choice
 
 from bson import ObjectId
 from marshmallow import Schema, EXCLUDE, fields, pre_load
@@ -39,11 +39,18 @@ class VideoSchema(Schema):
     banner = fields.Str(missing=default_banner, allow_none=True)
     title = fields.Str(missing='')
     description = fields.Str(missing='')
-    public_address = fields.Str(required=True)
-    created_time = ResDatetimeField()
-    total_view = fields.Int(missing=randint(5000, 60000))
-    user = fields.Nested(UserView(), missing={})
     stream = fields.Nested(StreamVideo)
+
+    public_address = fields.Str(required=True)
+
+    created_time = ResDatetimeField()
+    user = fields.Nested(UserView(), missing={})
+    followed = fields.Bool(missing=choice([True, False]))
+
+    total_view = fields.Int(missing=randint(5000, 60000))
+    total_heart = fields.Int(missing=randint(5000, 60000))
+    total_comment = fields.Int(missing=randint(15000, 60000))
+    total_share = fields.Int(missing=randint(500, 6000))
 
     @pre_load
     def load_user(self, in_data, **kwargs):

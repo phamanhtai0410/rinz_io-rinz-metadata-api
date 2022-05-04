@@ -9,7 +9,7 @@ from pydash import get
 
 from lib.redis_util import get_user_by_id
 from lib.schema.req import ResDatetimeField, ObjectIdField
-from random import randint
+from random import randint, choice
 
 from src.enums.obj import ObjType
 
@@ -33,6 +33,7 @@ class ChannelView(Schema):
 
     channel = fields.Str(missing='Unnamed', data_key='username')
     avatar = fields.Str(missing='https://i.pravatar.cc/300')
+    followed = fields.Bool(missing=choice([True, False]))
     _id = ObjectIdField()
 
 
@@ -49,8 +50,14 @@ class VideoView(Schema):
     description = fields.Str(missing='')
     public_address = fields.Str(required=True)
     created_time = ResDatetimeField()
+
     total_view = fields.Int(missing=randint(5000, 60000))
+    total_heart = fields.Int(missing=randint(5000, 60000))
+    total_comment = fields.Int(missing=randint(15000, 60000))
+    total_share = fields.Int(missing=randint(500, 6000))
+
     user = fields.Nested(UserView(), missing={})
+    followed = fields.Bool(missing=choice([True, False]))
 
     @pre_load
     def load_user(self, in_data, **kwargs):
