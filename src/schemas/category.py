@@ -61,7 +61,7 @@ class VideoView(Schema):
 map_object = {
     ObjType.VIDEO: VideoView(),
     ObjType.LIVE: VideoView(),
-    # ObjType.SHORT: VideoView(),
+    ObjType.SHORT_VIDEO: VideoView(),
     # ObjType.LIVE: VideoView(),
 
     ObjType.CHANNEL: ChannelView()
@@ -100,6 +100,7 @@ class ComponentView(Schema):
     route = fields.Str()
     props = fields.Nested(PropsComponent())
     item_route = fields.Str()
+    more_items = fields.Str()
 
 
 class ComponentsView(Schema):

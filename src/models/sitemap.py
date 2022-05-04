@@ -180,6 +180,7 @@ mockup_explore_short = [
         "route": PageRoute.SHORTS  # for load more items with page and page size
     }
 ]
+mockup_explore_music = []
 
 
 class SitemapModel(BaseMG):
@@ -203,9 +204,9 @@ class SitemapModel(BaseMG):
 
     @staticmethod
     def get_explore(page_explore):
-        if page_explore == PageCode.EXPLORE_LIVE:
+        if f'/{page_explore}' == PageCode.EXPLORE_LIVE:
             return mockup_explore_live
-        if page_explore in [PageRoute.MUSIC, PageRoute.TOP_MUSIC]:
-            return
-        if page_explore in [PageRoute.SHORTS, PageRoute.TOP_SHORT]:
+        if f'/{page_explore}' in [PageRoute.MUSIC, PageRoute.TOP_MUSIC]:
+            return mockup_explore_music
+        if f'/{page_explore}' in [PageRoute.SHORTS, PageRoute.TOP_SHORT]:
             return mockup_explore_short

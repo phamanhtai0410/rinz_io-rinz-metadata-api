@@ -83,7 +83,8 @@ class MetaService(object):
                     "items": cls.get_top(x['code']) if x['obj_type'] != ObjType.CHANNEL
                     else cls.get_channels(x['code']),
                     "obj_type": x.get('obj_type')
-                }
+                },
+                'more_items': f'{x["route"]}/items'
             } for x in _components
         ]
 
