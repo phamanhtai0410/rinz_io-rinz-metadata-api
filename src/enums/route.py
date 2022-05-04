@@ -13,6 +13,9 @@ class PageRoute(object):
     TOP_LIVE = '/top-live'
     TOP_SHORT = '/top-short'
     CHANNELS = '/channels'
+    LIVE = '/live'
+    MUSIC = '/music'
+    SHORTS = '/shorts'
 
 
 class ItemRoute(object):

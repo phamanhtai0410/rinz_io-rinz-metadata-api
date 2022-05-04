@@ -164,6 +164,23 @@ mockup_explore_live = [
     }
 ]
 
+mockup_explore_short = [
+    {
+        "page": PageCode.EXPLORE_SHORT,
+        "code": BlockCode.LIVE_PAGE_BANNER_VIDEOS,
+        "order": 1,
+        "props": {
+            "title": "",
+            "description": "",
+            "items": []  # init items
+        },
+        "type": ComponentCode.SHORT_VERTICAL,
+        "item_route": ItemRoute.SHORT,
+        'obj_type': ObjType.SHORT_VIDEO,
+        "route": PageRoute.SHORTS  # for load more items with page and page size
+    }
+]
+
 
 class SitemapModel(BaseMG):
     class Meta:
@@ -186,4 +203,9 @@ class SitemapModel(BaseMG):
 
     @staticmethod
     def get_explore(page_explore):
-        return mockup_explore_live
+        if page_explore == PageCode.EXPLORE_LIVE:
+            return mockup_explore_live
+        if page_explore in [PageRoute.MUSIC, PageRoute.TOP_MUSIC]:
+            return
+        if page_explore in [PageRoute.SHORTS, PageRoute.TOP_SHORT]:
+            return mockup_explore_short

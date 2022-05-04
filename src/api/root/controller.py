@@ -51,13 +51,22 @@ def get_obj_by_id(route, obj_id, *args, **kwargs):
 
 @lib.handle_res(login=False, res_schema=ExploreAll, param_schema=FormLoadMore)
 def get_more_of_items(obj_id, more_type, params, *args, **kwargs):
-
     _items, _object_type, _item_route = MetaService.get_more_by_item(
         obj_id,
         more_type,
         params
     )
 
+    return {
+        'items': _items,
+        'object_type': _object_type,
+        'item_route': _item_route
+    }
+
+
+@lib.handle_res(login=False, res_schema=ExploreAll, param_schema=FormLoadMore)
+def get_more_items(route, params, *args, **kwargs):
+    _items, _object_type, _item_route = MetaService.get_explore_all(explore=route, size=params.page_size)
     return {
         'items': _items,
         'object_type': _object_type,

@@ -71,7 +71,8 @@ class VideoSchema(Schema):
 map_object = {
     ObjType.VIDEO: VideoSchema(),
     ObjType.LIVE: VideoSchema(),
-    ObjType.CHANNEL: ChannelView()
+    ObjType.CHANNEL: ChannelView(),
+    ObjType.SHORT_VIDEO: VideoSchema()
 }
 
 

@@ -8,7 +8,7 @@
 
 class ObjType(object):
     VIDEO = 'VIDEO'
-    SHORT_VIDEO = 'SHORT_VIDEO'
+    SHORT_VIDEO = 'SHORT'
     LIVE = 'LIVE'
     CHANNEL = 'CHANNEL'
 

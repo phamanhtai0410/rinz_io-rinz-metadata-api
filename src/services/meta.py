@@ -25,14 +25,26 @@ class MetaService(object):
         return None, None
 
     @staticmethod
-    def get_explore_all(explore):
-        if f'/{explore}' in [PageRoute.TOP_NFT, PageRoute.TOP_MUSIC, PageRoute.TOP_VIDEO, PageRoute.TOP_SHORT]:
-            return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+    def get_explore_all(explore, size=20):
+        if f'/{explore}' in [PageRoute.TOP_NFT, PageRoute.TOP_MUSIC, PageRoute.TOP_VIDEO]:
+            return list(EventModel.get_random_items(filter={
+                'type': ObjType.VIDEO
+            },size=size)), ObjType.VIDEO, ItemRoute.VIDEO
+
         if f'/{explore}' in [PageRoute.TOP_LIVE]:
-            return list(EventModel.get_random_items(size=20)), ObjType.LIVE, ItemRoute.LIVE
+            return list(EventModel.get_random_items(filter={
+                'type': ObjType.LIVE
+            },size=size)), ObjType.LIVE, ItemRoute.LIVE
+
         if f'/{explore}' in [PageRoute.CHANNELS]:
-            return UserModel.get_random_items(size=20), ObjType.CHANNEL, ItemRoute.CHANNEL
-        return list(EventModel.get_random_items(size=20)), ObjType.VIDEO, ItemRoute.VIDEO
+            return UserModel.get_random_items(filter={},size=size), ObjType.CHANNEL, ItemRoute.CHANNEL
+
+        if f'/{explore}' in [PageRoute.TOP_SHORT, PageRoute.SHORTS]:
+            return list(EventModel.get_random_items(filter={
+                'type': ObjType.SHORT_VIDEO
+            },size=size)), ObjType.SHORT_VIDEO, ItemRoute.SHORT
+
+        return list(EventModel.get_random_items(size=size)), ObjType.VIDEO, ItemRoute.VIDEO
 
     @staticmethod
     def get_more_by_item(obj_id: str, more_type: str, params):
@@ -103,3 +115,4 @@ class MetaService(object):
     @staticmethod
     def get_channels(block):
         return list(UserModel.get_random_items(size=6))
+
