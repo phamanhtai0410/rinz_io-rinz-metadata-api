@@ -41,3 +41,6 @@ class BlockCode(object):
 
     # Page explore shorts
     SHORT_PAGE_ALL = 'SHORT_PAGE_ALL'
+
+    # page explore music
+    MUSIC_PAGE_BEST = 'MUSIC_PAGE_BEST'

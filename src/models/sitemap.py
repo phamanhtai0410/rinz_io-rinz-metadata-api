@@ -180,7 +180,75 @@ mockup_explore_short = [
         "route": PageRoute.SHORTS  # for load more items with page and page size
     }
 ]
-mockup_explore_music = []
+mockup_explore_music = [
+    {
+        "page": PageCode.EXPLORE_MUSIC,
+        "code": BlockCode.MUSIC_PAGE_BEST,
+        "order": 1,
+        "props": {
+            "title": "Best New Songs",
+            "description": "",
+            "items": []  # init items
+        },
+        "type": ComponentCode.VIDEO_SHORT,
+        "item_route": ItemRoute.SHORT,
+        'obj_type': ObjType.SHORT_VIDEO,
+        "route": PageRoute.SHORTS  # for load more items with page and page size
+    },
+    {
+        "page": PageCode.EXPLORE_MUSIC,
+        "code": BlockCode.MUSIC_PAGE_BEST,
+        "order": 2,
+        "props": {
+            "title": "TOP TRENDING",
+            "description": "",
+            "items": []  # init items
+        },
+        "type": ComponentCode.VIDEO_SHORT,
+        "item_route": ItemRoute.SHORT,
+        'obj_type': ObjType.SHORT_VIDEO,
+        "route": PageRoute.SHORTS  # for load more items with page and page size
+    },
+    {
+        "page": PageCode.EXPLORE_MUSIC,
+        "code": BlockCode.POPULAR_CHANNEL,
+        "order": 3,
+        "props": {
+            "title": "Vietnam",
+            "description": ""
+        },
+        "type": ComponentCode.CHANNELS,
+        "route": PageRoute.CHANNELS,
+        "item_route": ItemRoute.CHANNEL,
+        'obj_type': ObjType.CHANNEL
+    },
+    {
+        "page": PageCode.EXPLORE_MUSIC,
+        "code": BlockCode.POPULAR_CHANNEL,
+        "order": 4,
+        "props": {
+            "title": "US/UK",
+            "description": ""
+        },
+        "type": ComponentCode.CHANNELS,
+        "route": PageRoute.CHANNELS,
+        "item_route": ItemRoute.CHANNEL,
+        'obj_type': ObjType.CHANNEL
+    },
+    {
+        "page": PageCode.EXPLORE_MUSIC,
+        "code": BlockCode.POPULAR_CHANNEL,
+        "order": 5,
+        "props": {
+            "title": "Top Artists",
+            "description": ""
+        },
+        "type": ComponentCode.CHANNELS,
+        "route": PageRoute.CHANNELS,
+        "item_route": ItemRoute.CHANNEL,
+        'obj_type': ObjType.CHANNEL
+    }
+]
 
 
 class SitemapModel(BaseMG):
