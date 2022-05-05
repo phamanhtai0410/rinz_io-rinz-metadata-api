@@ -16,18 +16,7 @@ from src.enums.obj import ObjType
 from src.enums.video import VideoType
 from src.models.stream import StreamModel
 from src.schemas.category import UserView, ChannelView, default_banner
-
-
-class StreamVideo(Schema):
-    class Meta:
-        ordered = True
-        unknown = EXCLUDE
-
-    video_id = fields.Str()
-    playback_uri = fields.Str()
-    duration = fields.Str()
-    resolution = fields.Int()
-    type = fields.Str(missing=VideoType.VOD)
+from src.schemas.stream import StreamVideo
 
 
 class VideoSchema(Schema):

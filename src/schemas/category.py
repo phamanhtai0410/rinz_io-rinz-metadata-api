@@ -4,14 +4,16 @@
         -
         -
 """
+from bson import ObjectId
 from marshmallow import fields, EXCLUDE, Schema, pre_load
-from pydash import get
 
 from lib.redis_util import get_user_by_id
 from lib.schema.req import ResDatetimeField, ObjectIdField
 from random import randint, choice
 
 from src.enums.obj import ObjType
+from src.models.stream import StreamModel
+from src.schemas.stream import StreamVideo
 
 default_banner = 'https://s3-alpha-sig.figma.com/img/402b/7c6c/53824e64a9ae4cbe850f69d339e1d379?Expires=1651449600&Signature=gv5HshfnCMLIeP3BD8d0kMDzBd36MdomUpS2pGNVc8JuvLl9aWdEJsv0WXyIj3gceHArsJsD0j0NEswmh9XiIBxm4~nkPI5cfLNYjGWNu1wuUtsbXFA9mgL7dZMo1NAHC3tzo4OFnOdnX4pNoDp1AT6z7~xDD3N5eJJxFy40fa8iY4LydQis38984mDRs~2oQNo07Fl1xsFgKE25ba0~fzvH3YBxDPcvIvA-H-6CnOYoh8iA9k1tEeMF9Hpz~jnWaXZdanGoTaFNtXVVFep1FiWjTytMxlXYJlwK9TfxdQ9ynXhl~hLXd6K8Sz8xHBNdZ~2JGDTaJVY0WV6kHff7Uw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA'
 
@@ -58,6 +60,25 @@ class VideoView(Schema):
 
     user = fields.Nested(UserView(), missing={})
     followed = fields.Bool(missing=choice([True, False]))
+
+    stream = fields.Nested(StreamVideo)
+
+    @pre_load
+    def _load_stream(self, in_data, **kwargs):
+        _ref_id = in_data['_id']
+        if isinstance(_ref_id, str):
+            _ref_id = ObjectId(_ref_id)
+
+        stream = StreamModel.db().find_one(
+            {
+                'live_event_id': _ref_id
+            }
+        )
+        if stream:
+            in_data['stream'] = stream.get('streams')
+        else:
+            in_data['stream'] = {}
+        return in_data
 
     @pre_load
     def load_user(self, in_data, **kwargs):
