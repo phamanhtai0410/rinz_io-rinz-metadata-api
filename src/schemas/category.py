@@ -15,7 +15,7 @@ from src.enums.obj import ObjType
 from src.models.stream import StreamModel
 from src.schemas.stream import StreamVideo
 
-default_banner = 'https://s3-alpha-sig.figma.com/img/402b/7c6c/53824e64a9ae4cbe850f69d339e1d379?Expires=1651449600&Signature=gv5HshfnCMLIeP3BD8d0kMDzBd36MdomUpS2pGNVc8JuvLl9aWdEJsv0WXyIj3gceHArsJsD0j0NEswmh9XiIBxm4~nkPI5cfLNYjGWNu1wuUtsbXFA9mgL7dZMo1NAHC3tzo4OFnOdnX4pNoDp1AT6z7~xDD3N5eJJxFy40fa8iY4LydQis38984mDRs~2oQNo07Fl1xsFgKE25ba0~fzvH3YBxDPcvIvA-H-6CnOYoh8iA9k1tEeMF9Hpz~jnWaXZdanGoTaFNtXVVFep1FiWjTytMxlXYJlwK9TfxdQ9ynXhl~hLXd6K8Sz8xHBNdZ~2JGDTaJVY0WV6kHff7Uw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA'
+default_banner = 'https://picsum.photos/400'
 
 
 class UserView(Schema):
