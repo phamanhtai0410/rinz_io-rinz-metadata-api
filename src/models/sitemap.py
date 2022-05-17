@@ -25,19 +25,19 @@ mockup_home = [
         "item_route": ItemRoute.NFT,
         'obj_type': ObjType.VIDEO
     },
-    {
-        "page": PageCode.HOME_PAGE,
-        "code": BlockCode.TOP_MUSIC,
-        "order": 2,
-        "props": {
-            "title": "Top Music",
-            "description": ""
-        },
-        "type": ComponentCode.VIDEO_SHORT,
-        "route": PageRoute.TOP_MUSIC,
-        "item_route": ItemRoute.MUSIC,
-        'obj_type': ObjType.VIDEO
-    },
+    # {
+    #     "page": PageCode.HOME_PAGE,
+    #     "code": BlockCode.TOP_MUSIC,
+    #     "order": 2,
+    #     "props": {
+    #         "title": "Top Music",
+    #         "description": ""
+    #     },
+    #     "type": ComponentCode.VIDEO_SHORT,
+    #     "route": PageRoute.TOP_MUSIC,
+    #     "item_route": ItemRoute.MUSIC,
+    #     'obj_type': ObjType.VIDEO
+    # },
     {
         "page": PageCode.HOME_PAGE,
         "code": BlockCode.TOP_LIVE,
