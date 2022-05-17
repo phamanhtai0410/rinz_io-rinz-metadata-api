@@ -85,7 +85,7 @@ class MetaService(object):
                     "obj_type": x.get('obj_type')
                 },
                 'more_items': f'{x["route"]}/items'
-            } for x in _components
+            } for x in _components if x
         ]
 
     @staticmethod
