@@ -28,30 +28,41 @@ class MetaService(object):
     def get_explore_all(explore, size=20):
         if f'/{explore}' in [PageRoute.TOP_NFT, PageRoute.TOP_MUSIC, PageRoute.TOP_VIDEO]:
             return list(EventModel.get_random_items(filter={
-                'type': ObjType.VIDEO
+                'type': ObjType.VIDEO,
+                'status': 'active'
             }, size=size)), ObjType.VIDEO, ItemRoute.VIDEO
 
         if f'/{explore}' in [PageRoute.TOP_LIVE]:
             return list(EventModel.get_random_items(filter={
-                'type': ObjType.LIVE
+                'type': ObjType.LIVE,
+                'status': 'active'
             }, size=size)), ObjType.LIVE, ItemRoute.LIVE
 
         if f'/{explore}' in [PageRoute.CHANNELS]:
-            return UserModel.get_random_items(filter={}, size=size), ObjType.CHANNEL, ItemRoute.CHANNEL
+            return UserModel.get_random_items(filter={
+                'status': 'active'
+            }, size=size), ObjType.CHANNEL, ItemRoute.CHANNEL
 
         if f'/{explore}' in [PageRoute.TOP_SHORT, PageRoute.SHORTS]:
             return list(EventModel.get_random_items(filter={
-                'type': ObjType.SHORT_VIDEO
+                'type': ObjType.SHORT_VIDEO,
+                'status': 'active'
             }, size=size)), ObjType.SHORT_VIDEO, ItemRoute.SHORT
 
-        return list(EventModel.get_random_items(size=size)), ObjType.VIDEO, ItemRoute.VIDEO
+        return list(EventModel.get_random_items(filter={
+            'status': 'active'
+        },size=size)), ObjType.VIDEO, ItemRoute.VIDEO
 
     @staticmethod
     def get_more_by_item(obj_id: str, more_type: str, params):
         if more_type == MoreByItem.PLAY_MORE:
-            return list(EventModel.get_random_items(size=params.page_size)), ObjType.VIDEO, ItemRoute.VIDEO
+            return list(EventModel.get_random_items(filter={
+                'status': 'active'
+            }, size=params.page_size)), ObjType.VIDEO, ItemRoute.VIDEO
         if more_type == MoreByItem.RECOMMEND:
-            return list(EventModel.get_random_items(size=params.page_size)), ObjType.VIDEO, ItemRoute.VIDEO
+            return list(EventModel.get_random_items(filter={
+                'status': 'active'
+            } ,size=params.page_size)), ObjType.VIDEO, ItemRoute.VIDEO
         return [], ObjType.VIDEO, ItemRoute.VIDEO
 
     @classmethod
@@ -106,7 +117,8 @@ class MetaService(object):
     def get_top(cls, block):
         # if block in [BlockCode.TOP_NFT, BlockCode.TOP_VIDEO]:
         return list(EventModel.get_random_items(filter={
-            'type': cls.get_event_type(block)
+            'type': cls.get_event_type(block),
+            'status': 'active'
         }, size=6))
 
         # return {
