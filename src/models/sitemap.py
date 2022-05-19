@@ -99,7 +99,8 @@ mockup_explore_live = [
         },
         "type": ComponentCode.VIDEO_BANNER,
         "item_route": ItemRoute.LIVE,
-        'obj_type': ObjType.LIVE
+        'obj_type': ObjType.LIVE,
+        'route': PageRoute.LIVE
     },
     {
         "page": PageCode.EXPLORE_LIVE,
@@ -110,7 +111,7 @@ mockup_explore_live = [
             "description": ""
         },
         "type": ComponentCode.VIDEO_SHORT,
-        # "route": PageRoute.TOP_MUSIC,
+        'route': PageRoute.LIVE,
         "item_route": ItemRoute.SHORT,
         'obj_type': ObjType.VIDEO
     },
@@ -121,7 +122,7 @@ mockup_explore_live = [
         "props": {"title": "Title",
                   "description": ""},
         "type": ComponentCode.VIDEO_SLIDER,
-        # "route": PageRoute.TOP_LIVE,
+        'route': PageRoute.LIVE,
         "item_route": ItemRoute.VIDEO,
         'obj_type': ObjType.VIDEO
     },
@@ -132,7 +133,7 @@ mockup_explore_live = [
         "props": {"title": "Category for you",
                   "description": ""},
         "type": ComponentCode.VIDEO_SHORT,
-        # "route": PageRoute.TOP_VIDEO,
+        'route': PageRoute.LIVE,
         "item_route": ItemRoute.SHORT,
         'obj_type': ObjType.VIDEO
     },
@@ -145,7 +146,7 @@ mockup_explore_live = [
             "description": ""
         },
         "type": ComponentCode.CHANNELS_WITH_FOLLOW,
-        # "route": PageRoute.TOP_SHORT,
+        'route': PageRoute.LIVE,
         "item_route": ItemRoute.CHANNEL,
         'obj_type': ObjType.CHANNEL
     },
@@ -158,7 +159,7 @@ mockup_explore_live = [
             "description": ""
         },
         "type": ComponentCode.VIDEO_SLIDER,
-        # "route": PageRoute.CHANNELS,
+        'route': PageRoute.LIVE,
         "item_route": ItemRoute.VIDEO,
         'obj_type': ObjType.VIDEO
     }
@@ -272,7 +273,7 @@ class SitemapModel(BaseMG):
 
     @staticmethod
     def get_explore(page_explore):
-        if f'/{page_explore}' == PageCode.EXPLORE_LIVE:
+        if f'/{page_explore}' == PageRoute.LIVE:
             return mockup_explore_live
         if f'/{page_explore}' in [PageRoute.MUSIC, PageRoute.TOP_MUSIC]:
             return mockup_explore_music

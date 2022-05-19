@@ -86,6 +86,7 @@ class MetaService(object):
             _components = SitemapModel.get_mock()
         else:
             _components = SitemapModel.get_explore(page_explore=page)
+        # print('_components', _components)
         return [
             {
                 **x,
