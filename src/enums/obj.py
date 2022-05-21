@@ -8,5 +8,13 @@
 
 class ObjType(object):
     VIDEO = 'VIDEO'
-    SHORT_VIDEO = 'SHORT_VIDEO'
+    SHORT_VIDEO = 'SHORT'
     LIVE = 'LIVE'
+    CHANNEL = 'CHANNEL'
+    NFT = 'NFT'
+    MUSIC = 'MUSIC'
+
+
+class MoreByItem(object):
+    RECOMMEND = 'recommend'
+    PLAY_MORE = 'play-more'

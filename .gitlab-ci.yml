@@ -33,6 +33,7 @@ stages:
       if [ "$CI_COMMIT_REF_NAME" == "stag" ]; then
         aws eks --region $AWS_REGION update-kubeconfig --name rinz-staging-cluster
       fi
+
 .predeploy: &predeploy |
   apk add --no-cache  bash git  python3 py3-pip curl
   pip3 install --upgrade pip 
@@ -49,7 +50,12 @@ build_stag:
   services:
   - docker:19.03.1-dind
   before_script:
+<<<<<<< HEAD
     - apk add --no-cache curl jq python py-pip wget git bash
+=======
+    - apk add --no-cache curl jq python py-pip wget git
+    - pip install awscli==1.19.112
+>>>>>>> 4f0918fb2a4df64971c55ebdaa79963130cd13e6
     - git submodule add --branch stag https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io/rinz-lib.git lib
     - git submodule sync --recursive
     - git submodule update --init --remote --recursive
