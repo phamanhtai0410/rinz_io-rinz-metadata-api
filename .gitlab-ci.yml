@@ -1,9 +1,15 @@
 variables:
   REGION: asia-southeast1
-  IMAGE_NAME: rinz-metadata-api
-  CONTAINER_REPO_ASIA_STAG: 420811272222.dkr.ecr.ap-southeast-1.amazonaws.com/rinz-staging-ecr/metadata-api
+  IMAGE_NAME: rinz-marketplace-api
+  CONTAINER_REPO_ASIA_STAG: 420811272222.dkr.ecr.ap-southeast-1.amazonaws.com/rinz-staging-ecr/marketplace-api
+  CONTAINER_REPO_ASIA_PROD: 420811272222.dkr.ecr.ap-southeast-1.amazonaws.com/rinz-production-ecr/marketplace-api
   NAMESPACE_STAG: api-stag
+  NAMESPACE_PROD: rinz-api-prod
   FULLREPO_ASIA_STAG: $CONTAINER_REPO_ASIA_STAG:$CI_COMMIT_SHORT_SHA
+  FULLREPO_ASIA_PROD: $CONTAINER_REPO_ASIA_PROD:$CI_COMMIT_SHORT_SHA
+  ENV_STAGING: $ENV_STAGING
+  ENV_PRODUCTION: $ENV_PRODUCTION
+
   HELM_VALUE: ${CI_COMMIT_REF_NAME}
   HELM_VERSION: 2.4.3
   AWS_REGION: ap-southeast-1
@@ -11,8 +17,6 @@ variables:
   DOCKER_DRIVER: overlay
   DOCKER_HOST: tcp://localhost:2375
   DOCKER_TLS_CERTDIR: ""
-  ENV_STAGING: $ENV_STAGING
-  ENV_TEST: $ENV_TEST
   GIT_SUBMODULE_STRATEGY: recursive
 
 
@@ -21,27 +25,20 @@ stages:
   - deploy
 
 .kubectl_config: &kubectl_config
-  - env
-  - aws sts get-caller-identity
   - |
-      if [ "$CI_COMMIT_REF_NAME" == "prod" ]; then
+      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
         aws eks --region $AWS_REGION update-kubeconfig --name rinz-production-cluster
       fi
   - |
       if [ "$CI_COMMIT_REF_NAME" == "stag" ]; then
         aws eks --region $AWS_REGION update-kubeconfig --name rinz-staging-cluster
       fi
-      if [ "$CI_COMMIT_REF_NAME" == "test" ]; then
-        aws eks --region $AWS_REGION update-kubeconfig --name rinz-staging-cluster
-      fi
-  - cat /root/.kube/config
 .predeploy: &predeploy |
-  apk add --no-cache  bash git  python3 py3-pip
+  apk add --no-cache  bash git  python3 py3-pip curl
   pip3 install --upgrade pip 
-  pip3 install --no-cache-dir awscli
+  pip3 install --no-cache-dir awscli==1.19.112
   helm plugin install https://github.com/hypnoglow/helm-s3.git
   helm repo add helm-template s3://rinz-helm-template
-  echo "pulll"
   helm pull s3://rinz-helm-template/helm-template-$HELM_VERSION.tgz --untar=true
 
 build_stag:
@@ -52,93 +49,30 @@ build_stag:
   services:
   - docker:19.03.1-dind
   before_script:
-    - apk add --no-cache curl jq python py-pip wget git
-    - pip install awscli 
+    - apk add --no-cache curl jq python py-pip wget git bash
     - git submodule add --branch stag https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io/rinz-lib.git lib
     - git submodule sync --recursive
     - git submodule update --init --remote --recursive
+    - pip install awscli==1.19.112
+    - export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && chmod +x ./get_helm.sh && ./get_helm.sh
+    - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v1.38.0/skaffold-linux-amd64 && chmod +x skaffold &&  mv skaffold /usr/local/bin
   script:
     - cp $ENV_STAGING .env
     - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $CONTAINER_REPO_ASIA_STAG
-    - git clone https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io-devops/helm-value/$IMAGE_NAME.git
-    - mv $IMAGE_NAME/stag.yaml .
     - |
       if [ "$CI_COMMIT_REF_NAME" == "stag" ]; then
-        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA_STAG#g" stag.yaml
-        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE_STAG#g" stag.yaml
+        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE_STAG#g" skaffold.yaml
+        sed -i -e "s#\[IMAGE_NAME\]#$IMAGE_NAME#g" skaffold.yaml
+        sed -i -e "s#\[CONTAINER_REPO\]#$CONTAINER_REPO_ASIA_STAG#g" skaffold.yaml
       fi
-    - docker build -t $FULLREPO_ASIA_STAG .
-    - docker push $FULLREPO_ASIA_STAG
+    - /usr/local/bin/skaffold build -p profile-stag --file-output=build.json
   only:
     refs:
       - stag
   artifacts:
     paths:
-    - stag.yaml
-build_test:
-  image: docker:19.03.1
-  tags:
-  - rinz-stag
-  stage: build
-  services:
-  - docker:19.03.1-dind
-  before_script:
-    - apk add --no-cache curl jq python py-pip wget git
-    - pip install awscli 
-  script:
-    - cp $ENV_TEST .env
-    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $CONTAINER_REPO_ASIA_STAG
-    - git clone https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io-devops/helm-value/$IMAGE_NAME.git
-    - mv $IMAGE_NAME/test.yaml .
-    - mv $IMAGE_NAME/private_key.pem .
-    - |
-      if [ "$CI_COMMIT_REF_NAME" == "test" ]; then
-        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA_STAG#g" test.yaml
-        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE_STAG#g" test.yaml
-      fi
-    - docker build -t $FULLREPO_ASIA_STAG .
-    - docker push $FULLREPO_ASIA_STAG
-  only:
-    refs:
-      - test
-  artifacts:
-    paths:
-    - test.yaml
-build_prod:
-  image: docker:19.03.1
-  tags:
-  - rinz-prod
-  stage: build
-  services:
-  - docker:19.03.1-dind
-  before_script:
-    - apk add --no-cache curl jq python py-pip wget git
-    - pip install awscli 
-  script:
-    - echo "REACT_APP_SOCKET_SERVER=https://socket.rinz.io" > .env.production.local
-    - echo "REACT_APP_PEER_SERVER=peer-asia.rinz.io" >> .env.production.local
-    - cat .env.production.local
-    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $CONTAINER_REPO_ASIA
-    - git clone https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io-devops/helm-value/$IMAGE_NAME.git
-    - mv landing-page/prod.yaml .
-    - |
-      if [ "$CI_COMMIT_REF_NAME" == "prod" ]; then
-        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA#g" prod.yaml
-        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE#g" prod.yaml
-      fi
-    - |
-      if [ "$CI_COMMIT_REF_NAME" == "stag" ]; then
-        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA#g" stag.yaml
-        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE#g" stag.yaml
-      fi
-    - docker build -t $FULLREPO_ASIA .
-    - docker push $FULLREPO_ASIA
-  only:
-    refs:
-      - prod
-  artifacts:
-    paths:
-    - prod.yaml
+    - skaffold.yaml
+    - build.json
 
 deploy_stag:
   stage: deploy
@@ -148,22 +82,54 @@ deploy_stag:
   script:
     - *predeploy
     - *kubectl_config
-    - helm upgrade --install  --namespace $NAMESPACE_STAG  -f stag.yaml  $IMAGE_NAME ./helm-template
+    - git clone https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io-devops/helm-value/$IMAGE_NAME.git
+    - mv $IMAGE_NAME/stag.yaml .
+    - |
+      if [ "$CI_COMMIT_REF_NAME" == "stag" ]; then
+        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA_STAG#g" stag.yaml
+        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE_STAG#g" stag.yaml
+      fi
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v1.38.0/skaffold-linux-amd64 && chmod +x skaffold &&  mv skaffold /usr/local/bin
+
+    - /usr/local/bin/skaffold deploy -p profile-stag   -a build.json
   only:
     refs:
       - stag
-deploy_test:
-  stage: deploy
-  image:  alpine/helm:3.2.1
+
+build_prod:
+  image: docker:19.03.1
   tags:
-  - rinz-stag
+  - rinz-prod
+  stage: build
+  services:
+  - docker:19.03.1-dind
+  before_script:
+    - apk add --no-cache curl jq python py-pip wget git bash
+    - git submodule add --branch master https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io/rinz-lib.git lib
+    - git submodule sync --recursive
+    - git submodule update --init --remote --recursive
+    - pip install awscli==1.19.112
+    - export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && chmod +x ./get_helm.sh && ./get_helm.sh
+    - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v1.38.0/skaffold-linux-amd64 && chmod +x skaffold &&  mv skaffold /usr/local/bin
   script:
-    - *predeploy
-    - *kubectl_config
-    - helm upgrade --install  --namespace $NAMESPACE_STAG  -f test.yaml  $IMAGE_NAME-test ./helm-template
+    - cp $ENV_PRODUCTION .env
+    - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $CONTAINER_REPO_ASIA_PROD
+    - |
+      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE_PROD#g" skaffold.yaml
+        sed -i -e "s#\[IMAGE_NAME\]#$IMAGE_NAME#g" skaffold.yaml
+        sed -i -e "s#\[CONTAINER_REPO\]#$CONTAINER_REPO_ASIA_PROD#g" skaffold.yaml
+      fi
+    - /usr/local/bin/skaffold build -p profile-prod --file-output=build.json
   only:
     refs:
-      - test
+      - master
+  artifacts:
+    paths:
+    - skaffold.yaml
+    - build.json
+
 deploy_prod:
   stage: deploy
   image:  alpine/helm:3.2.1
@@ -172,7 +138,18 @@ deploy_prod:
   script:
     - *predeploy
     - *kubectl_config
-    - helm upgrade --install  --namespace $NAMESPACE_PROD  -f prod.yaml  $IMAGE_NAME ./helm-template
+    - git clone https://read-token:$GITLAB_TOKEN@gitlab.rinznetwork.com/rinz-io-devops/helm-value/$IMAGE_NAME.git
+    - mv $IMAGE_NAME/prod.yaml .
+    - |
+      if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA_STAG#g" prod.yaml
+        sed -i -e "s#\[NAMESPACE\]#$NAMESPACE_PROD#g" prod.yaml
+      fi
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v1.38.0/skaffold-linux-amd64 && chmod +x skaffold &&  mv skaffold /usr/local/bin
+
+    - /usr/local/bin/skaffold deploy -p profile-prod   -a build.json
   only:
     refs:
-      - prod
+      - master
+
