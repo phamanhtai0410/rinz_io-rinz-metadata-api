@@ -142,7 +142,7 @@ deploy_prod:
     - mv $IMAGE_NAME/prod.yaml .
     - |
       if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
-        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA_STAG#g" prod.yaml
+        sed -i -e "s#\[FULLREPO_ASIA\]#$FULLREPO_ASIA_PROD#g" prod.yaml
         sed -i -e "s#\[NAMESPACE\]#$NAMESPACE_PROD#g" prod.yaml
       fi
     - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
