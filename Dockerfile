@@ -1,4 +1,4 @@
-FROM  420811272222.dkr.ecr.ap-southeast-1.amazonaws.com/rinz-staging-ecr:pythonbase_v2
+FROM  968557029040.dkr.ecr.ap-southeast-1.amazonaws.com/esollabs/cicd:vb-python-351e643-dirty
 
 RUN apk add --no-cache  tzdata git make  gcc g++ 
 
