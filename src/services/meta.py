@@ -121,10 +121,10 @@ class MetaService(object):
             'status': 'active'
         }, size=6))
 
-        return {
-            **_top_events,
-            "_id": str(_top_events["_id"])
-        }
+        return [{
+            **_top_event,
+            "_id": str(_top_event["_id"])
+        }   for _top_event in _top_events]
         # if block in [BlockCode.TOP_NFT, BlockCode.TOP_VIDEO]:
         # return list(EventModel.get_random_items(filter={
         #     'type': cls.get_event_type(block),
