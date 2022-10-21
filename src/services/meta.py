@@ -116,11 +116,20 @@ class MetaService(object):
 
     @classmethod
     def get_top(cls, block):
-        # if block in [BlockCode.TOP_NFT, BlockCode.TOP_VIDEO]:
-        return list(EventModel.get_random_items(filter={
+        _top_events = list(EventModel.get_random_items(filter={
             'type': cls.get_event_type(block),
             'status': 'active'
         }, size=6))
+
+        return {
+            **_top_events,
+            "_id": str(_top_events["_id"])
+        }
+        # if block in [BlockCode.TOP_NFT, BlockCode.TOP_VIDEO]:
+        # return list(EventModel.get_random_items(filter={
+        #     'type': cls.get_event_type(block),
+        #     'status': 'active'
+        # }, size=6))
 
         # return {
         #
